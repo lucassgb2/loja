@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Nave.exe</title>
+    <style>
+        /* FUNDO PADRÃO */
+        body {
+            background-color: #008080;
+            font-family: 'Tahoma', 'MS Sans Serif', sans-serif;
+            margin: 0;
+            overflow: hidden; /* Impede barras de rolagem */
+            height: 100vh;
+        }
+
+        /* A JANELA QUE VAI CAIR */
+        .nave-janela {
+            position: absolute;
+            width: 600px;
+            background: #c0c0c0;
+            border: 2px solid #fff;
+            border-right-color: #000;
+            border-bottom-color: #000;
+            box-shadow: 3px 3px 10px rgba(0,0,0,0.5);
+            z-index: 9999;
+        }
+
+        /* BARRA DE TÍTULO AZUL */
+        .barra-titulo {
+            background: #000080;
+            color: #fff;
+            padding: 4px 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        /* BOTÃO DE FECHAR */
+        .btn-fechar {
+            background: #c0c0c0;
+            color: #000;
+            border: 2px solid #fff;
+            border-right-color: #000;
+            border-bottom-color: #000;
+            width: 16px;
+            height: 14px;
+            font-size: 10px;
+            text-align: center;
+            line-height: 12px;
+            cursor: pointer;
+            font-family: monospace;
+        }
+
+        /* CONTEÚDO DA JANELA */
+        .conteudo-janela {
+            padding: 10px;
+            text-align: center;
+            background: #fff;
+        }
+
+        .conteudo-janela img {
+            max-width: 100%;
+            border: 1px solid #ccc;
+        }
+
+        .conteudo-janela p {
+            font-size: 14px;
+            color: #000;
+        }
+
+        .conteudo-janela a {
+            color: #0000ff;
+            text-decoration: underline;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <script>
+        // Função que cria uma janela e faz ela cair
+        function criarNaveCaindo() {
+            // Cria a div da janela
+            const janela = document.createElement('div');
+            janela.className = 'nave-janela';
+
+            // Adiciona o HTML dentro da janela
+            janela.innerHTML = `
+                <div class="barra-titulo">
+                    <span>Internet Explorer - Reddit</span>
+                    <div class="btn-fechar" onclick="this.parentElement.parentElement.remove()">X</div>
+                </div>
+                <div class="conteudo-janela">
+                    <h3 style="margin: 5px 0;">Star Wars - Ill always respect Star Wars...</h3>
+                    <p>Carregando página do Reddit...</p>
+                    <!-- Link simulado, já que o Reddit bloqueia iframe -->
+                    <a href="https://www.reddit.com/r/StarWars/comments/1kkvh05/ill_always_respect_star_wars_for_willing_to_have/?tl=pt-br" target="_blank">
+                        Clique aqui para abrir o Reddit
+                    </a>
+                </div>
+            `;
+
+            // Sorteia a posição horizontal onde ela vai cair
+            const leftAleatorio = Math.floor(Math.random() * (window.innerWidth - 600));
+            janela.style.left = leftAleatorio + 'px';
+            janela.style.top = '-400px'; // Começa escondida lá no topo
+
+            // Adiciona a janela na tela
+            document.body.appendChild(janela);
+
+            // Animação de queda usando JavaScript
+            let posicaoAtual = -400;
+            const velocidade = Math.random() * 5 + 5; // Sorteia uma velocidade (5 a 10)
+
+            const animacao = setInterval(() => {
+                posicaoAtual += velocidade;
+                janela.style.top = posicaoAtual + 'px';
+
+                // Se a janela sair da tela por baixo, remove ela
+                if (posicaoAtual > window.innerHeight) {
+                    clearInterval(animacao);
+                    janela.remove();
+                }
+            }, 20); // Roda a cada 20 milissegundos
+        }
+
+        // Cria a primeira janela
+        criarNaveCaindo();
+
+        // Cria uma nova janela a cada 2 segundos
+        setInterval(criarNaveCaindo, 2000);
+    </script>
+
+</body>
+</html>

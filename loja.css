@@ -1,0 +1,215 @@
+/* =========================================
+   VISUAL DO CATÁLOGO DA LOJA - VERSÃO FINAL
+========================================= */
+
+body {
+    background-image: url('https://i.pinimg.com/736x/64/2f/86/642f8601c19f3d5025c27931e32f8394.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    background-color: #1a1a1a;
+    font-family: 'Tahoma', Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    color: #000;
+}
+
+/* BARRA SUPERIOR AZUL */
+.top-nav {
+    background: #000080;
+    color: white;
+    padding: 15px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 3px solid #fff;
+    box-shadow: 0 3px 5px rgba(0,0,0,0.5);
+}
+
+.top-nav h1 {
+    margin: 0;
+    font-size: 24px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: white;
+}
+
+.top-nav a {
+    color: #ffff00;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 14px;
+    margin-left: 20px;
+}
+
+.top-nav a:hover {
+    color: #fff;
+    text-decoration: underline;
+}
+
+/* Container principal */
+.catalogo-container {
+    max-width: 1100px;
+    margin: 30px auto;
+    background: #fff;
+    border: 3px solid #000;
+    box-shadow: 8px 8px 0 rgba(0,0,0,0.5);
+}
+
+/* Cabeçalho do catálogo */
+.catalogo-header {
+    background: #ff0000;
+    color: #fff;
+    text-align: center;
+    padding: 30px 20px;
+    border-bottom: 4px dashed #000;
+    text-shadow: 2px 2px 0 #000, -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000;
+}
+
+.catalogo-header h2 {
+    margin: 0;
+    font-size: 40px;
+    font-family: 'Impact', Arial, sans-serif;
+    text-transform: uppercase;
+}
+
+.catalogo-header p {
+    font-size: 18px;
+    font-weight: bold;
+    margin-top: 5px;
+}
+
+/* Aviso piscante */
+.aviso-piscante {
+    color: #ff0000;
+    text-align: center;
+    padding: 10px;
+    font-weight: bold;
+    font-size: 16px;
+    border-bottom: 2px solid #000;
+    border-top: 2px dashed #000;
+    transition: background 0.1s; /* Deixa a troca de cor suave */
+}
+
+@keyframes piscar {
+    from { background: #ffff00; }
+    to { background: #ff0000; color: #fff; }
+}
+
+/* Grid de produtos */
+.produtos-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 20px;
+    padding: 20px;
+    background: #f4f4f4;
+    align-items: stretch; 
+}
+
+/* Card do produto */
+.produto {
+    background: #fff;
+    border: 2px solid #999;
+    padding: 15px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.1s;
+}
+
+.produto:hover {
+    border-color: #ff0000;
+    transform: scale(1.03);
+    box-shadow: 0 0 10px rgba(255,0,0,0.3);
+    z-index: 2;
+}
+
+.produto img {
+    width: 100%;
+    height: 140px;
+    object-fit: contain; 
+    background: #eee;
+    border: 1px solid #ccc;
+    margin-bottom: 10px;
+}
+
+.produto h3 {
+    font-size: 16px;
+    margin: 0 0 10px 0;
+    color: #000080;
+    word-wrap: break-word;
+}
+
+.produto .detalhes {
+    font-size: 12px;
+    color: #555;
+    margin-bottom: 15px;
+    flex-grow: 1;
+    word-wrap: break-word;
+}
+
+.produto .preco {
+    font-size: 22px;
+    font-weight: bold;
+    color: #009900;
+    margin-bottom: 10px;
+}
+
+/* Botão de comprar - O SEGREDO ESTÁ AQUI */
+.btn-comprar {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    background: #c0c0c0;
+    border: 2px outset #fff;
+    color: #000;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 14px;
+    text-decoration: none;
+    text-align: center; /* Centraliza o texto */
+    box-sizing: border-box;
+    text-transform: uppercase;
+    font-family: 'Tahoma', sans-serif;
+}
+
+.btn-comprar:active {
+    border: 2px inset #fff;
+    background: #999;
+}
+
+/* Rodapé */
+.rodape-loja {
+    background: #000;
+    color: #fff;
+    text-align: center;
+    padding: 15px;
+    font-size: 12px;
+    border-top: 3px solid #000080;
+}
+
+.rodape-loja a {
+    color: #00ffff;
+    text-decoration: none;
+}
+/* LATERAIS DE PROPAGANDA */
+.ads-lateral {
+    position: fixed;
+    top: 0; /* Começa do topo */
+    width: 160px;
+    height: 100vh; /* Ocupa a tela inteira */
+    z-index: 100;
+    pointer-events: none; /* Impede que o container bloqueie os cliques */
+}
+
+/* As imagens dentro do container SIM podem ser clicadas */
+.ads-lateral img {
+    pointer-events: auto; 
+}
+
+#ads-left { left: 20px; }
+#ads-right { right: 20px; }
+
+@media (max-width: 1350px) {
+    .ads-lateral { display: none; }
+}

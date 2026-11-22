@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Snake Game - ERROR 404</title>
+    <style>
+        /* FUNDO PADRÃO DE SITES DE JOGOS ANTIGOS */
+        body {
+            background-color: #000;
+            background-image: url('https://www.transparenttextures.com/patterns/stardust.png');
+            color: #fff;
+            font-family: 'Verdana', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        /* A CAIXA DO JOGO */
+        .game-box {
+            background: #111;
+            border: 3px outset #555;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 0 20px #00ff00;
+            position: relative;
+        }
+
+        /* BARRA DE NAVEGAÇÃO DO JOGO */
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            border-bottom: 1px dashed #555;
+            padding-bottom: 10px;
+        }
+
+        .top-bar h1 {
+            color: #00ff00;
+            font-family: 'Impact', sans-serif;
+            font-size: 32px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 2px 2px #ff00ff;
+            margin: 0;
+        }
+
+        /* BOTÃO DE VOLTAR */
+        .btn-voltar {
+            background: #333;
+            color: #00ffff;
+            text-decoration: none;
+            padding: 5px 10px;
+            font-size: 12px;
+            font-weight: bold;
+            border: 2px outset #555;
+        }
+
+        .btn-voltar:hover {
+            background: #555;
+            color: #fff;
+        }
+
+        .subtitulo {
+            color: #ffff00;
+            font-size: 14px;
+            margin-bottom: 20px;
+            font-style: italic;
+        }
+
+        /* A TELA DO JOGO (CANVAS) */
+        canvas {
+            background: #000;
+            border: 4px solid #00ff00;
+            box-shadow: inset 0 0 10px #000, 0 0 15px #00ff00;
+            display: block;
+            margin: 0 auto;
+        }
+
+        /* ÁREA DE MENSAGENS */
+        #mensagem {
+            background: #222;
+            color: #00ff00;
+            border: 2px inset #555;
+            padding: 10px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 16px;
+            font-weight: bold;
+            text-align: left;
+        }
+
+        /* BOTÕES ESTILO ANOS 2000 */
+        button {
+            background: #ff00ff;
+            color: #fff;
+            font-family: 'Verdana', sans-serif;
+            font-weight: bold;
+            font-size: 16px;
+            padding: 10px 20px;
+            border: 2px outset #ff00ff;
+            cursor: pointer;
+            text-transform: uppercase;
+            box-shadow: 2px 2px 0 #000;
+        }
+
+        button:hover {
+            background: #ff55ff;
+        }
+
+        button:active {
+            border: 2px inset #ff00ff;
+            box-shadow: none;
+        }
+
+        /* RODAPÉ DO SITE ANTIGO */
+        .footer-marquee {
+            background: #000;
+            color: #ffff00;
+            border: 1px solid #555;
+            padding: 5px;
+            margin-top: 20px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+        }
+    </style>
+</head>
+    <!-- SCRIPT DE JANELAS CAINDO (Nave) -->
+    <style>
+        .nave-janela {
+            position: fixed;
+            width: 250px; /* Menor para não cobrir todo o jogo */
+            background: #c0c0c0;
+            border: 2px solid #fff;
+            border-right-color: #000;
+            border-bottom-color: #000;
+            box-shadow: 3px 3px 10px rgba(0,0,0,0.5);
+            z-index: 99999; /* Fica por cima de tudo */
+        }
+        .barra-titulo-nave {
+            background: #000080;
+            color: #fff;
+            padding: 2px 5px;
+            display: flex;
+            justify-content: space-between;
+            font-weight: bold;
+            font-size: 12px;
+        }
+        .btn-fechar-nave {
+            background: #c0c0c0;
+            color: #000;
+            border: 2px solid #fff;
+            border-right-color: #000;
+            border-bottom-color: #000;
+            width: 14px;
+            height: 12px;
+            font-size: 10px;
+            text-align: center;
+            line-height: 10px;
+            cursor: pointer;
+            font-family: monospace;
+        }
+        .conteudo-nave {
+            padding: 10px;
+            background: #fff;
+            text-align: center;
+            font-size: 12px;
+        }
+    </style>
+<!-- SCRIPT DE IMAGENS CRUZANDO A TELA -->
+    <style>
+        .imagem-caindo {
+            position: fixed;
+            top: -300px; 
+            z-index: -1; /* O SEGREDO ESTÁ AQUI: joga a imagem para trás do jogo */
+            pointer-events: none; /* Impede que a imagem bloqueie cliques */
+            transition: transform 0.1s linear;
+        }
+    </style>
+
+    <script>
+        function criarImagemCaindo() {
+            const img = document.createElement('img');
+            img.className = 'imagem-caindo';
+            // Link da imagem
+            img.src = 'https://static.vecteezy.com/system/resources/previews/072/486/202/non_2x/burning-asteroid-or-meteor-isolated-on-transparent-png.png';
+
+            // Sorteia a direção (esquerda para direita, ou direita para esquerda)
+            const daEsquerdaParaDireita = Math.random() > 0.5;
+            
+            // Sorteia um tamanho aleatório entre 150px e 350px
+            const tamanho = Math.floor(Math.random() * (220 - 140 + 1)) + 150;
+            img.style.width = tamanho + 'px';
+
+            if (daEsquerdaParaDireita) {
+                img.style.left = '-300px'; // Começa fora da tela na esquerda
+            } else {
+                img.style.right = '-300px'; // Começa fora da tela na direita
+            }
+
+            document.body.appendChild(img);
+
+            // Variáveis da animação
+            let topoAtual = -300;
+            let lateralAtual = daEsquerdaParaDireita ? -300 : -300;
+            
+            // Velocidade de queda e velocidade lateral (diagonal)
+            const velocidadeQueda = Math.random() * 4 + 4;
+            const velocidadeLateral = Math.random() * 6 + 4;
+
+            const animacao = setInterval(() => {
+                topoAtual += velocidadeQueda;
+                lateralAtual += velocidadeLateral;
+
+                img.style.top = topoAtual + 'px';
+
+                if (daEsquerdaParaDireita) {
+                    img.style.left = lateralAtual + 'px';
+                } else {
+                    img.style.right = lateralAtual + 'px';
+                }
+
+                // Quando a imagem sair completamente da tela por baixo, remove
+                if (topoAtual > window.innerHeight + 300) {
+                    clearInterval(animacao);
+                    img.remove();
+                }
+            }, 20); 
+        }
+
+        // Cria uma nova imagem a cada 4 segundos
+        setInterval(criarImagemCaindo, 2000);
+    </script>
+
+    </script>
+<body>
+
+    <!-- CAIXA DO JOGO -->
+    <div class="game-box">
+        
+        <!-- BARRA DE NAVEGAÇÃO DO JOGO -->
+        <div class="top-bar">
+            <h1>Snake.exe</h1>
+            <a href="loja.php" class="btn-voltar">« Voltar para a Loja</a>
+        </div>
+
+        <p class="subtitulo">~ O clássico jogo da cobrinha para o seu PC ~</p>
+        
+        <div id="mensagem">C:\&gt; Aguardando o jogador...</div>
+
+        <canvas id="gameCanvas" width="450" height="450"></canvas>
+
+        <br>
+        <button onclick="iniciarJogo()">INICIAR JOGO</button>
+
+        <div class="footer-marquee">
+            <marquee scrollamount="4">USE AS SETAS DO TECLADO PARA JOGAR // NÃO DEIXE A COBRA BATER NA PAREDE // VISITE NOSSA LOJA PARA COMPRAR BUGIGANGAS</marquee>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById("gameCanvas");
+        const ctx = canvas.getContext("2d");
+        const msg = document.getElementById("mensagem");
+
+        const tamanhoQuadrado = 30;
+        const larguraTabuleiro = 15;
+        const alturaTabuleiro = 15;
+
+        let cobra = [];
+        let direcao = "DIREITA";
+        let proximaDirecao = "DIREITA";
+        let maca = { x: 5, y: 5 };
+        let pontos = 0;
+        let jogoRodando = false;
+        let loopJogo;
+
+        // Carrega a imagem do susto para o Canvas
+        const imgSusto = new Image();
+        imgSusto.src = "https://i.pinimg.com/1200x/20/6d/d0/206dd02620db6464d54d90e2612ddcf0.jpg";
+
+        document.addEventListener("keydown", (evento) => {
+            if (!jogoRodando) return;
+            
+            if (evento.key === "ArrowUp" && direcao !== "BAIXO") proximaDirecao = "CIMA";
+            if (evento.key === "ArrowDown" && direcao !== "CIMA") proximaDirecao = "BAIXO";
+            if (evento.key === "ArrowLeft" && direcao !== "DIREITA") proximaDirecao = "ESQUERDA";
+            if (evento.key === "ArrowRight" && direcao !== "ESQUERDA") proximaDirecao = "DIREITA";
+        });
+
+        function iniciarJogo() {
+            clearInterval(loopJogo);
+
+            cobra = [
+                { x: 7, y: 7 },
+                { x: 6, y: 7 },
+                { x: 5, y: 7 }
+            ];
+            direcao = "DIREITA";
+            proximaDirecao = "DIREITA";
+            pontos = 0;
+            jogoRodando = true;
+            msg.innerHTML = "C:\\> Status: JOGANDO... Pontos: 0";
+            
+            gerarMaca();
+            desenharJogo();
+
+            loopJogo = setInterval(desenharJogo, 150);
+        }
+
+        function gerarMaca() {
+            maca.x = Math.floor(Math.random() * larguraTabuleiro);
+            maca.y = Math.floor(Math.random() * alturaTabuleiro);
+        }
+
+        function desenharJogo() {
+            if (!jogoRodando) return;
+
+            ctx.fillStyle = "#000";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            direcao = proximaDirecao;
+
+            let cabeca = { x: cobra[0].x, y: cobra[0].y };
+            if (direcao === "CIMA") cabeca.y--;
+            if (direcao === "BAIXO") cabeca.y++;
+            if (direcao === "ESQUERDA") cabeca.x--;
+            if (direcao === "DIREITA") cabeca.x++;
+
+            if (cabeca.x < 0 || cabeca.x >= larguraTabuleiro || cabeca.y < 0 || cabeca.y >= alturaTabuleiro) {
+                fimDeJogo();
+                return;
+            }
+
+            for (let i = 0; i < cobra.length; i++) {
+                if (cobra[i].x === cabeca.x && cobra[i].y === cabeca.y) {
+                    fimDeJogo();
+                    return;
+                }
+            }
+
+            cobra.unshift(cabeca);
+
+            if (cabeca.x === maca.x && cabeca.y === maca.y) {
+                pontos += 10;
+                msg.innerHTML = "C:\\> Status: JOGANDO... Pontos: " + pontos;
+                gerarMaca();
+            } else {
+                cobra.pop();
+            }
+
+            ctx.fillStyle = "#ff0000";
+            ctx.shadowBlur = 10;
+            ctx.shadowColor = "#ff0000";
+            ctx.beginPath();
+            ctx.arc(maca.x * tamanhoQuadrado + 15, maca.y * tamanhoQuadrado + 15, 10, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.shadowBlur = 0;
+
+            for (let i = 0; i < cobra.length; i++) {
+                ctx.fillStyle = (i === 0) ? "#00ff00" : "#008800";
+                ctx.fillRect(cobra[i].x * tamanhoQuadrado + 1, cobra[i].y * tamanhoQuadrado + 1, tamanhoQuadrado - 2, tamanhoQuadrado - 2);
+            }
+        }
+
+        function fimDeJogo() {
+            jogoRodando = false;
+            clearInterval(loopJogo); 
+            
+            // 1. Toca o som de erro
+            let audio = new Audio('https://www.soundjay.com/misc/sounds/boom.mp3');
+            audio.play();
+
+            // 2. Desenha a imagem DENTRO do Canvas, cobrindo o jogo
+            // O "cover" simula o CSS object-fit: cover para a imagem não esticar
+            ctx.fillStyle = "#000";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Calcula a proporção para a imagem preencher o quadrado sem distorcer
+            const ratio = Math.max(canvas.width / imgSusto.width, canvas.height / imgSusto.height);
+            const newWidth = imgSusto.width * ratio;
+            const newHeight = imgSusto.height * ratio;
+            const x = (canvas.width / 2) - (newWidth / 2);
+            const y = (canvas.height / 2) - (newHeight / 2);
+            
+            ctx.drawImage(imgSusto, x, y, newWidth, newHeight);
+
+            // 3. Espera 2,5 segundos com a imagem na tela e reinicia
+            setTimeout(() => {
+                iniciarJogo(); 
+            }, 2500); 
+        }
+
+        // Tela inicial
+        ctx.fillStyle = "#000";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = "#00ff00";
+        ctx.font = "20px 'Courier New', monospace";
+        ctx.textAlign = "center";
+        ctx.fillText("Clique em INICIAR JOGO", canvas.width/2, canvas.height/2);
+    </script>
+</body>
+</html>

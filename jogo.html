@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Jogo da Velha.exe</title>
+    <style>
+        body {
+            background-color: #008080;
+            font-family: 'Tahoma', 'MS Sans Serif', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+        .janela-win95 {
+            background: #c0c0c0;
+            border: 2px solid #fff;
+            border-right-color: #000;
+            border-bottom-color: #000;
+            box-shadow: inset 1px 1px #dfdfdf, inset -1px -1px #808080;
+            padding: 4px;
+            width: 350px;
+            position: relative;
+            z-index: 10;
+        }
+        .barra-titulo {
+            background: #000080;
+            color: #fff;
+            padding: 4px 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: bold;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+        .botoes-janela span {
+            display: inline-block;
+            background: #c0c0c0;
+            color: #000;
+            border: 2px solid #fff;
+            border-right-color: #000;
+            border-bottom-color: #000;
+            width: 16px;
+            height: 14px;
+            font-size: 10px;
+            text-align: center;
+            line-height: 12px;
+            margin-left: 2px;
+            font-family: monospace;
+            cursor: pointer;
+            user-select: none;
+        }
+        .botoes-janela span:active {
+            border: 2px solid #000;
+            border-right-color: #fff;
+            border-bottom-color: #fff;
+        }
+        .conteudo-janela { padding: 10px; text-align: center; }
+        h2 { font-size: 16px; margin-top: 0; color: #000; text-transform: uppercase; }
+        .tabuleiro {
+            display: grid;
+            grid-template-columns: repeat(3, 80px);
+            gap: 2px;
+            justify-content: center;
+            margin-bottom: 15px;
+            background: #808080;
+            border: 2px solid #fff;
+            border-right-color: #000;
+            border-bottom-color: #000;
+            padding: 2px;
+        }
+        .celula {
+            width: 80px;
+            height: 80px;
+            background: #c0c0c0;
+            border: 2px solid #fff;
+            border-right-color: #000;
+            border-bottom-color: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 50px;
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .celula:active {
+            border: 2px solid #000;
+            border-right-color: #fff;
+            border-bottom-color: #fff;
+        }
+        .x { color: #ff0000; }
+        .o { color: #0000ff; }
+        #mensagem {
+            background: #000;
+            color: #00ff00;
+            font-family: 'Courier New', monospace;
+            font-size: 16px;
+            padding: 5px;
+            margin-bottom: 15px;
+            text-align: left;
+            border: 2px inset #c0c0c0;
+            min-height: 20px;
+        }
+        button {
+            background: #c0c0c0;
+            border: 2px outset #fff;
+            padding: 5px 15px;
+            font-family: 'Tahoma', sans-serif;
+            font-weight: bold;
+            font-size: 13px;
+            cursor: pointer;
+        }
+        button:active { border: 2px inset #fff; }
+        .marquee-box {
+            background: #000;
+            color: #ffff00;
+            font-size: 12px;
+            margin-top: 10px;
+            padding: 2px;
+            border: 1px inset #fff;
+        }
+        /* JUMPSCARE */
+        #jumpscare {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: #000;
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+        }
+        /* O vídeo vai preencher a tela toda */
+        #jumpscare video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="janela-win95">
+        <div class="barra-titulo">
+            <span>Jogo_da_Velha.exe</span>
+            <div class="botoes-janela">
+                <span onclick="darSusto()">_</span>
+                <span>□</span>
+                <span onclick="fecharJanela()">X</span>
+            </div>
+        </div>
+
+        <div class="conteudo-janela">
+            <h2>~ Jogo da Velha ~</h2>
+            <div id="mensagem">C:\&gt; Aguardando jogada...</div>
+            <div class="tabuleiro" id="tabuleiro"></div>
+            <button onclick="reiniciarJogo()">Reiniciar.exe</button>
+            <div class="marquee-box">
+                <marquee scrollamount="3">MELHOR VISUALIZADO NO INTERNET EXPLORER 5.0 // RESOLUÇÃO 800X600 // ADORAMOS JOGO DA VELHA!!!...//</marquee>
+            </div>
+        </div>
+    </div>
+
+    <!-- TELA DO JUMPSCARE (AGORA COM VÍDEO) -->
+    <div id="jumpscare">
+        <video id="videoSusto" src="Audio.mp4.mp4" preload="auto"></video>
+    </div>
+
+    <script>
+        let jogadorAtual = "X";
+        let jogoAtivo = true;
+        let estadoJogo = ["", "", "", "", "", "", "", "", ""];
+
+        const combinacoesVitoria = [
+            [0, 1, 2], [3, 4, 5], [6, 7, 8],
+            [0, 3, 6], [1, 4, 7], [2, 5, 8],
+            [0, 4, 8], [2, 4, 6]
+        ];
+
+        const tabuleiro = document.getElementById("tabuleiro");
+        const msg = document.getElementById("mensagem");
+
+        function criarCelulas() {
+            tabuleiro.innerHTML = "";
+            estadoJogo = ["", "", "", "", "", "", "", "", ""];
+            jogoAtivo = true;
+            jogadorAtual = "X";
+            msg.innerText = "C:\\> Aguardando jogada...";
+
+            for (let i = 0; i < 9; i++) {
+                const celula = document.createElement("div");
+                celula.classList.add("celula");
+                celula.dataset.index = i;
+                celula.addEventListener("click", clicarCelula);
+                tabuleiro.appendChild(celula);
+            }
+        }
+
+        function clicarCelula(evento) {
+            const celula = evento.target;
+            const index = celula.dataset.index;
+
+            if (estadoJogo[index] === "" && jogoAtivo) {
+                estadoJogo[index] = jogadorAtual;
+                celula.innerText = jogadorAtual;
+                celula.classList.add(jogadorAtual.toLowerCase());
+                verificarVitoria();
+            }
+        }
+
+        function verificarVitoria() {
+            let venceu = false;
+
+            for (let i = 0; i < combinacoesVitoria.length; i++) {
+                const [a, b, c] = combinacoesVitoria[i];
+                if (estadoJogo[a] && estadoJogo[a] === estadoJogo[b] && estadoJogo[a] === estadoJogo[c]) {
+                    venceu = true;
+                    break;
+                }
+            }
+
+            if (venceu) {
+                msg.innerText = `C:\\> SUCESSO: Jogador ${jogadorAtual} venceu!`;
+                jogoAtivo = false;
+                return;
+            }
+
+            if (!estadoJogo.includes("")) {
+                msg.innerText = "C:\\> ERRO 404: EMPATE DETECTADO.";
+                jogoAtivo = false;
+                return;
+            }
+
+            jogadorAtual = jogadorAtual === "X" ? "O" : "X";
+        }
+
+        function reiniciarJogo() {
+            criarCelulas();
+        }
+
+        // Função do botão "_" 
+        function darSusto() {
+            const susto = document.getElementById("jumpscare");
+            const video = document.getElementById("videoSusto");
+            
+            susto.style.display = "flex"; 
+            
+            // TOCA O VÍDEO
+            video.currentTime = 0;
+            video.muted = false; 
+            video.play();
+
+            // Espera 3,5 segundos e reinicia
+            setTimeout(() => {
+                susto.style.display = "none";
+                video.pause();
+                criarCelulas(); 
+            }, 17500);
+        }
+
+        // Função do botão "X" (Susto e Volta pra Loja)
+        function fecharJanela() {
+            const susto = document.getElementById("jumpscare");
+            const video = document.getElementById("videoSusto");
+
+            susto.style.display = "flex"; 
+
+            // TOCA O VÍDEO
+            video.currentTime = 0;
+            video.muted = false;
+            video.play();
+
+            // Espera 3,5 segundos e vai para a loja
+            setTimeout(() => {
+                susto.style.display = "none";
+                video.pause();
+                window.location.href = "loja.php"; 
+            }, 3500);
+        }
+    </script>
+</body>
+</html>

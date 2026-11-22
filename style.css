@@ -1,0 +1,614 @@
+/* =================================
+   CONFIGURAÇÕES GERAIS
+================================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background:
+        linear-gradient(rgba(10, 35, 55, 0.25), rgba(10, 35, 55, 0.25)),
+        url("https://i.pinimg.com/1200x/df/d6/b0/dfd6b03dc016c22a0a20370e6783d4b2.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+
+/* =================================
+   MENU SUPERIOR
+================================= */
+
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 100;
+    width: 100%;
+    padding: 15px 7%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(10, 35, 55, 0.35);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+
+/* =================================
+   LOGO
+================================= */
+
+.logo-box {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    padding: 6px 14px 6px 6px;
+    border-radius: 40px;
+    background: rgba(255, 255, 255, 0.12);
+    border: 2px solid rgba(255, 255, 255, 0.45);
+    transition: 0.3s;
+}
+
+.logo-box:hover {
+    background: rgba(255, 255, 255, 0.22);
+    transform: scale(1.03);
+}
+
+.logo-img {
+    width: 45px;
+    height: 45px;
+    object-fit: cover;
+    border-radius: 50%;
+    display: block;
+    border: 2px solid rgba(255, 255, 255, 0.6);
+}
+
+.logo-text {
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+}
+
+
+/* =================================
+   NAVEGAÇÃO
+================================= */
+
+.navigation {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+}
+
+.navigation a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.navigation a:hover {
+    color: #a9d9f5;
+}
+
+.login-nav {
+    width: 115px;
+    height: 45px;
+    background: transparent;
+    border: 2px solid white;
+    border-radius: 6px;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.login-nav:hover {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+
+/* =================================
+   ÁREA CENTRAL
+================================= */
+
+main {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 90px;
+}
+
+
+/* =================================
+   CAIXA DE LOGIN
+================================= */
+
+.login-box {
+    position: relative;
+    width: 350px;
+    padding: 35px;
+    background: rgba(220, 240, 250, 0.35);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    border-radius: 20px;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.25);
+    transition: 0.3s;
+}
+
+.login-box h2 {
+    text-align: center;
+    font-size: 28px;
+    margin-bottom: 30px;
+}
+
+
+/* =================================
+   BOTÃO DE FECHAR
+================================= */
+
+.close-button {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 40px;
+    height: 40px;
+    background: #162b3b;
+    color: white;
+    border: none;
+    border-radius: 0 15px 0 15px;
+    font-size: 27px;
+    cursor: pointer;
+}
+
+
+/* =================================
+   CAMPOS DE ENTRADA
+================================= */
+
+.input-box {
+    position: relative;
+    width: 100%;
+    height: 55px;
+    margin: 25px 0;
+    border-bottom: 2px solid #162b3b;
+}
+
+.input-box input {
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    border: none;
+    outline: none;
+    padding: 0 30px 0 5px;
+    font-size: 15px;
+    color: #162b3b;
+}
+
+.input-box label {
+    position: absolute;
+    left: 5px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    transition: 0.3s;
+}
+
+.input-box input:focus ~ label,
+.input-box input:not(:placeholder-shown) ~ label {
+    top: -5px;
+    font-size: 12px;
+}
+
+.input-icon {
+    position: absolute;
+    right: 8px;
+    top: 18px;
+}
+
+
+/* =================================
+   LEMBRAR SENHA
+================================= */
+
+.remember-forgot {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 13px;
+    margin: -5px 0 20px;
+}
+
+.remember-forgot a,
+.register-link a {
+    color: #162b3b;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.remember-forgot a:hover,
+.register-link a:hover {
+    text-decoration: underline;
+}
+
+
+/* =================================
+   BOTÃO DE LOGIN
+================================= */
+
+.login-button {
+    width: 100%;
+    height: 40px;
+    background: #162b3b;
+    color: white;
+    border: none;
+    border-radius: 7px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.login-button:hover {
+    background: #284c65;
+}
+
+
+/* =================================
+   REGISTRO
+================================= */
+
+.register-link {
+    text-align: center;
+    margin-top: 22px;
+    font-size: 13px;
+}
+
+
+/* =================================
+   RESPONSIVIDADE BASE
+================================= */
+
+@media (max-width: 650px) {
+    .navbar { padding: 15px 20px; }
+    .navigation { gap: 12px; }
+    .navigation a { display: none; }
+    .login-box { width: 90%; max-width: 350px; }
+}
+
+
+/* ============================================================
+   POPUPS DE MEME
+============================================================ */
+
+.meme-popup {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 9999;
+}
+
+/* --- WINDOWS 95 --- */
+.win95-window {
+    width: 250px;
+    background: #c0c0c0;
+    border: 2px solid #dfdfdf;
+    border-right-color: #000;
+    border-bottom-color: #000;
+    box-shadow: inset 1px 1px #fff, inset -1px -1px #808080;
+    font-family: 'MS Sans Serif', Tahoma, sans-serif;
+    padding: 3px;
+    color: black;
+}
+
+.win95-title-bar {
+    background: #000080;
+    color: white;
+    padding: 3px 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.win95-close {
+    background: #c0c0c0;
+    border: 1px solid #fff;
+    border-right-color: #000;
+    border-bottom-color: #000;
+    font-weight: bold;
+    cursor: pointer;
+    width: 20px;
+    height: 18px;
+    line-height: 10px;
+    text-align: center;
+    font-family: monospace;
+}
+
+.win95-content {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.win95-button {
+    background: #c0c0c0;
+    border: 2px solid #fff;
+    border-right-color: #000;
+    border-bottom-color: #000;
+    padding: 5px 25px;
+    font-family: 'MS Sans Serif', Tahoma, sans-serif;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.win95-button:active {
+    border: 2px solid #000;
+    border-right-color: #fff;
+    border-bottom-color: #fff;
+}
+
+/* --- POPUP MODERNO --- */
+.modern-popup {
+    width: 300px;
+    background: #fff;
+    border: 2px solid #5a82a8;
+    border-radius: 4px;
+    font-family: Arial, sans-serif;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+.modern-header {
+    background: #5a82a8;
+    color: white;
+    padding: 10px 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 16px;
+}
+
+.modern-close {
+    background: #d9534f;
+    color: white;
+    border: none;
+    padding: 2px 8px;
+    font-size: 18px;
+    cursor: pointer;
+    border-radius: 3px;
+}
+
+.modern-body {
+    padding: 20px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+.form-gender {
+    font-size: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+    width: 100%;
+}
+
+.form-gender select {
+    width: 100%;
+    padding: 8px;
+    font-size: 16px;
+    border: 1px solid #999;
+    background: #f0f8ff;
+}
+
+.modern-ok {
+    padding: 5px 20px;
+    border: 1px dashed #000;
+    background: #f8f8f8;
+    cursor: pointer;
+    align-self: flex-end;
+}
+
+
+/* ============================================================
+   SISTEMA DE ANÚNCIOS E EFEITOS VISUAIS
+   (fora de qualquer @media — vale em todas as telas)
+============================================================ */
+
+/* ---------- CONTAINERS ---------- */
+#ads-left,
+#ads-right,
+#notifications,
+#flyers-layer {
+    position: fixed;
+    pointer-events: none;
+    z-index: 9000;
+}
+
+#ads-left  { left: 10px;  top: 100px; width: 220px; height: calc(100vh - 120px); }
+#ads-right { right: 10px; top: 100px; width: 160px; height: calc(100vh - 120px); overflow: hidden; }
+#notifications { right: 12px; bottom: 12px; width: 260px; display: flex; flex-direction: column; gap: 8px; }
+#flyers-layer { inset: 0; width: 100%; height: 100%; overflow: hidden; }
+
+
+/* ---------- ANÚNCIOS (coluna esquerda) ---------- */
+.ad-card {
+    pointer-events: auto;
+    position: absolute;
+    left: 0;
+    background: #fffbe6;
+    border: 2px solid #222;
+    box-shadow: 3px 3px 0 #222;
+    padding: 8px;
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+    color: #111;
+    animation: adAppear .35s ease-out both;
+    max-width: 210px;
+}
+
+.ad-card img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    border: 1px solid #222;
+    margin-bottom: 6px;
+    background: #fff;
+}
+
+.ad-card h4 {
+    font-size: 13px;
+    margin: 0 0 4px;
+    color: #b80000;
+    text-transform: uppercase;
+}
+
+.ad-card p {
+    margin: 0 0 6px;
+    line-height: 1.25;
+}
+
+.ad-close {
+    position: absolute;
+    top: -2px;
+    right: -2px;
+    width: 22px;
+    height: 22px;
+    background: #d9534f;
+    color: #fff;
+    border: 2px solid #222;
+    font-weight: bold;
+    cursor: pointer;
+    line-height: 1;
+    font-family: monospace;
+}
+
+.ad-close:hover { background: #b52b27; }
+
+@keyframes adAppear {
+    from { opacity: 0; transform: translateX(-20px); }
+    to   { opacity: 1; transform: translateX(0); }
+}
+
+
+/* ---------- NOTIFICAÇÕES ---------- */
+.toast {
+    pointer-events: auto;
+    background: #162b3b;
+    color: #fff;
+    border: 2px solid #a9d9f5;
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-family: Arial, sans-serif;
+    font-size: 13px;
+    box-shadow: 0 4px 12px rgba(0,0,0,.35);
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+    animation: toastIn .3s ease-out both;
+}
+
+.toast .toast-icon { font-size: 18px; line-height: 1; }
+
+.toast .toast-close {
+    background: transparent;
+    border: none;
+    color: #a9d9f5;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 15px;
+    margin-left: auto;
+}
+
+.toast.saindo { animation: toastOut .3s ease-in forwards; }
+
+@keyframes toastIn  { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes toastOut { to   { opacity: 0; transform: translateY(10px); } }
+
+
+/* ---------- IMAGENS QUE DESCEM (coluna direita) ---------- */
+#ads-right .ticker-col {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    animation: tickerDown linear infinite;
+}
+
+#ads-right .ticker-col img {
+    width: 100%;
+    height: auto;
+    border: 2px solid #222;
+    box-shadow: 2px 2px 0 #222;
+    background: #fff;
+}
+
+@keyframes tickerDown {
+    from { transform: translateY(-50%); }
+    to   { transform: translateY(0); }
+}
+
+
+/* ---------- ELEMENTOS QUE ATRAVESSAM A TELA ---------- */
+.flyer {
+    position: absolute;
+    left: 0;
+    top: 0;
+    font-size: 26px;
+    user-select: none;
+    white-space: nowrap;
+    will-change: transform;
+    pointer-events: none;
+}
+
+.flyer img {
+    display: block;
+    /* height e width são definidos pelo JS (aleatório por aparição) */
+    height: auto;
+    width: auto;
+    max-height: 160px;      /* teto de segurança */
+    max-width: 280px;       /* teto de segurança */
+    /* object-fit preserva a proporção mesmo se um dos eixos for limitado */
+    object-fit: contain;
+}
+
+
+/* ---------- RESPONSIVIDADE DO SISTEMA DE EFEITOS ---------- */
+@media (max-width: 900px) {
+    #ads-right { display: none; }
+    #ads-left  { width: 170px; height: calc(100vh - 100px); }
+    .ad-card   { max-width: 160px; font-size: 11px; }
+    #notifications { width: 200px; }
+}
+
+
+/* ---------- MOVIMENTO REDUZIDO ---------- */
+@media (prefers-reduced-motion: reduce) {
+    #ads-right .ticker-col { animation: none; }
+    .flyer { display: none !important; }
+    .ad-card, .toast { animation: none !important; }
+}
